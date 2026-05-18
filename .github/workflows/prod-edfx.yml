@@ -1,14 +1,15 @@
-name: Deploy dev edfx AWS Account
+name: Deploy PROD edfx AWS Account
 
 on:
   push:
     branches: [main]
     paths:
-      - 'Aws-infra/**'
+      - 'Aws-infra/tf_env/Prod_Edfx_Deployment.tfvars'
   pull_request:
     branches: [main]
     paths:
-      - 'Aws-infra/**'
+      - 'Aws-infra/tf_env/Prod_Edfx_Deployment.tfvars'
+      - 'Aws-infra/tf_env/Prod_Backend_Edfx_Config.config'
   workflow_dispatch:
     inputs:
       Action:
@@ -40,7 +41,7 @@ jobs:
     with:
       environment: prod-edfx
       WORKING_DIR: Aws-infra/
-      Terraform_Backend_Configuration_File: tf_env/Prod_Backend_Edfx_Config_Ohio.config
+      Terraform_Backend_Configuration_File: tf_env/Prod_Backend_Edfx_Config.config
       Terraform_Deployment_Configuration_File: tf_env/Prod_Edfx_Deployment.tfvars
       Action: ${{ github.event.inputs.Action == 'plan' && 'plan_only' || github.event.inputs.Action || (github.event_name == 'pull_request' && 'plan_only' || 'apply') }}
     secrets: inherit
