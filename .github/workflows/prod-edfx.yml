@@ -1,0 +1,46 @@
+name: Deploy dev edfx AWS Account
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Aws-infra/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'Aws-infra/**'
+  workflow_dispatch:
+    inputs:
+      Action:
+        description: "Select Terraform Action"
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+        default: plan
+
+permissions:
+  contents: read
+  issues: write
+  id-token: write
+
+concurrency:
+  group: tf-dev-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  plan-and-apply-dev:
+    permissions:
+      id-token: write
+      contents: read
+      issues: write
+    uses: ./.github/workflows/Infra-Reusable-Template.yml
+    with:
+      environment: prod-edfx
+      WORKING_DIR: Aws-infra/
+      Terraform_Backend_Configuration_File: tf_env/Prod_Backend_Edfx_Config_Ohio.config
+      Terraform_Deployment_Configuration_File: tf_env/Prod_Edfx_Deployment.tfvars
+      Action: ${{ github.event.inputs.Action == 'plan' && 'plan_only' || github.event.inputs.Action || (github.event_name == 'pull_request' && 'plan_only' || 'apply') }}
+    secrets: inherit
