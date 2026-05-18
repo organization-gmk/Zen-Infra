@@ -1,0 +1,42 @@
+name: Deploy dev edfx AWS Account
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Aws-infra/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'Aws-infra/**'
+  workflow_dispatch:
+    inputs:
+      Action:
+        description: "Select Terraform Action"
+        required: true
+        type: choice
+        options:
+          - apply
+          - destroy
+        default: apply
+
+permissions:
+  contents: read
+  issues: write
+  id-token: write
+
+jobs:
+  plan-and-apply-dev:
+    permissions:
+      id-token: write
+      contents: read
+      issues: write
+    uses: ./.github/workflows/Infra-Reusable-Template.yml
+    with:
+      environment: edfx-dev
+      WORKING_DIR: Aws-infra/
+      Terraform_Backend_Configuration_File: tf_env/Backend_Edfx_Config_Ohio.config
+      Terraform_Deployment_Configuration_File: tf_env/Dev_Edfx_Deployment.tfvars
+      # Context determination: PR -> plan_only, Manual -> selection choice, Merge/Push -> apply
+      Action: ${{ github.event.inputs.Action || (github.event_name == 'pull_request' && 'plan_only' || 'apply') }}
+    secrets: inherit
