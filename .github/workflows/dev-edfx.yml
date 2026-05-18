@@ -38,7 +38,7 @@ jobs:
       issues: write
     uses: ./.github/workflows/Infra-Reusable-Template.yml
     with:
-      environment: edfx-dev
+      environment: dev-edfx
       WORKING_DIR: Aws-infra/
       Terraform_Backend_Configuration_File: tf_env/Backend_Edfx_Config_Ohio.config
       Terraform_Deployment_Configuration_File: tf_env/Dev_Edfx_Deployment.tfvars
