@@ -16,14 +16,19 @@ on:
         required: true
         type: choice
         options:
+          - plan
           - apply
           - destroy
-        default: apply
+        default: plan
 
 permissions:
   contents: read
   issues: write
   id-token: write
+
+concurrency:
+  group: tf-dev-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   plan-and-apply-dev:
@@ -37,6 +42,5 @@ jobs:
       WORKING_DIR: Aws-infra/
       Terraform_Backend_Configuration_File: tf_env/Backend_Edfx_Config_Ohio.config
       Terraform_Deployment_Configuration_File: tf_env/Dev_Edfx_Deployment.tfvars
-      # Context determination: PR -> plan_only, Manual -> selection choice, Merge/Push -> apply
-      Action: ${{ github.event.inputs.Action || (github.event_name == 'pull_request' && 'plan_only' || 'apply') }}
+      Action: ${{ github.event.inputs.Action == 'plan' && 'plan_only' || github.event.inputs.Action || (github.event_name == 'pull_request' && 'plan_only' || 'apply') }}
     secrets: inherit
