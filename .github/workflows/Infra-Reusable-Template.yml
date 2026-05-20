@@ -62,7 +62,7 @@ jobs:
           terraform init -backend-config=${{ inputs.Terraform_Backend_Configuration_File }}
 
       - name: Terraform Validate
-        run: terraform validate -no-color
+        run: terraform validate
 
       # Speculative Plan for PRs or Standard Merges
       - name: Terraform Plan (Standard)
@@ -114,6 +114,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
           audience: sts.amazonaws.com
+          
       - name: Terraform Init
         run: |
           rm -rf .terraform
