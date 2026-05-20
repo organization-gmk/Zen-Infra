@@ -30,6 +30,10 @@ jobs:
     name: "Terraform Plan (${{ inputs.environment }})"
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }} 
+
+    env:
+      TF_LOG: DEBUG
+
     container:
       image: krishna0011/awscli-tf-1.5:latest
       credentials:
@@ -46,6 +50,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
+          audience: sts.amazonaws.com
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
@@ -108,7 +113,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-
+          audience: sts.amazonaws.com
       - name: Terraform Init
         run: |
           rm -rf .terraform
