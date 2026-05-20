@@ -114,7 +114,7 @@ resource "aws_iam_role_policy_attachment" "eks_ecr_access_policy_attachment" {
 }
 
 resource "aws_ecr_lifecycle_policy" "microservices_lifecycle" {
-  # 1. Loop through the data resource keys instead of the raw variable
+  
   for_each   = data.aws_ecr_repository.zen_microservices_repos
   
   repository = each.value.name
