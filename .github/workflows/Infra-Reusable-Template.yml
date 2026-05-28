@@ -63,7 +63,7 @@ jobs:
       - name: Terraform Init
         run: |
           rm -rf .terraform
-          terraform init -reconfigure -backend-config=${{ inputs.Terraform_Backend_Configuration_File }}
+          terraform init -upgrade -backend-config=${{ inputs.Terraform_Backend_Configuration_File }}
 
       - name: Terraform Validate
         run: terraform validate
