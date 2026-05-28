@@ -21,4 +21,7 @@ node_groups = {
       role = "worker"
     }
   }
-}
+} 
+
+db_name = "pharmadb"
+

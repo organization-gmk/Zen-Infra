@@ -42,3 +42,28 @@ module "eks" {
 
  
 }
+
+module "secrets_manager" {
+  source = "./modules/secrets-manager"
+
+  env = local.env
+  db_name = var.db_name
+  db_username = var.db_username
+  db_password = var.db_password
+  jwt_secret = var.jwt_secret
+  tags = local.common_tags
+}
+
+module "rds" {
+  source = "./modules/rds"
+
+  name_prefix = local.name_prefix
+  env = local.env
+  subnet_ids = module.vpc.private_subnets
+  vpc_id = module.vpc.vpc_id
+  eks_security_group_id = module.vpc.nodes_security_group_id
+  db_name = var.db_name
+  db_username = module.secrets_manager.db_username
+  db_password = module.secrets_manager.db_password
+  tags = local.common_tags
+}
