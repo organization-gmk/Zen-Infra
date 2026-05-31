@@ -1,5 +1,5 @@
 resource "aws_db_subnet_group" "main" {
-  name       = lower("${var.name_prefix}-${var.env}-rds-subnet-group")
+  name       = lower(replace("${var.name_prefix}-${var.env}-rds-subnet-group", "_", "-"))
   subnet_ids = var.subnet_ids
 
   tags = merge(var.tags, {
@@ -8,7 +8,7 @@ resource "aws_db_subnet_group" "main" {
 }
 
 resource "aws_security_group" "rds" {
-  name        = "${var.name_prefix}-${var.env}-rds-sg"
+  name        = lower(replace("${var.name_prefix}-${var.env}-rds-sg", "_", "-"))
   description = "Security group for RDS PostgreSQL instance"
   vpc_id      = var.vpc_id
 
@@ -33,7 +33,7 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_db_instance" "main" {
-  identifier             = "${var.name_prefix}-${var.env}-postgres"
+  identifier             = lower(replace("${var.name_prefix}-${var.env}-rds", "_", "-"))
   engine                 = "postgres"
   engine_version         = "15.7"
   instance_class         = "db.t3.micro"
