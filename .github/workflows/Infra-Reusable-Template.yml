@@ -32,7 +32,7 @@ jobs:
     environment: ${{ inputs.environment }} 
 
     env:
-      TF_LOG: DEBUG
+      TF_LOG: ERROR
       
       TF_VAR_db_username: ${{ secrets.DB_USERNAME }}
       TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
