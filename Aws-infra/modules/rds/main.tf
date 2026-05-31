@@ -1,5 +1,5 @@
 resource "aws_db_subnet_group" "main" {
-  name       = "${var.name_prefix}-${var.env}-rds-subnet-group"
+  name       = lower("${var.name_prefix}-${var.env}-rds-subnet-group")
   subnet_ids = var.subnet_ids
 
   tags = merge(var.tags, {
