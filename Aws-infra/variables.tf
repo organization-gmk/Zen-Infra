@@ -24,41 +24,59 @@ variable "tags" {
   default     = {}
 }
 
-# variable "ebs_addon_version" {
-#   description = "EBS CSI Driver Addon Version"
-#   type        = string
+variable "ebs_addon_version" {
+  description = "EBS CSI Driver Addon Version"
+  type        = string
   
-# }
+}
 
-# variable "cluster_log_types" {
-#   description = "The log types to enable for the EKS cluster"
-#   type        = list(string)
-#   default = [ "api", "audit", "authenticator", "controllerManager", "scheduler" ]
+variable "cluster_log_types" {
+  description = "The log types to enable for the EKS cluster"
+  type        = list(string)
+  default = [ "api", "audit", "authenticator", "controllerManager", "scheduler" ]
   
-# }
+}
 
-# variable "cluster_version" {
-#   description = "The Kubernetes version for the EKS cluster"
-#   type        = string
+variable "cluster_version" {
+  description = "The Kubernetes version for the EKS cluster"
+  type        = string
   
-# }
+}
 
-# variable "node_groups" {
-#   description = "The node groups for the EKS cluster"
-#   type = map(object({
-#     name           = string
-#     desired_size   = number
-#     min_size       = number
-#     max_size       = number
-#     instance_types = list(string)
-#     ami_type       = string
-#     disk_size      = number
-#     capacity_type  = string
-#     labels         = map(string)
-#   }))
-# }
+variable "node_groups" {
+  description = "The node groups for the EKS cluster"
+  type = map(object({
+    name           = string
+    desired_size   = number
+    min_size       = number
+    max_size       = number
+    instance_types = list(string)
+    ami_type       = string
+    disk_size      = number
+    capacity_type  = string
+    labels         = map(string)
+  }))
+}
 
+variable "db_name" {
+  description = "Name of the database to create"
+  type        = string
+  
+}
+variable "db_username" {
+  description = "Database username to store in Secrets Manager"
+  type        = string
+  sensitive   = true
+}
 
-# variable "security_alert_email" {
-#   type = string
-# }
+variable "db_password" {
+  description = "Database password to store in Secrets Manager"
+  type        = string
+  sensitive   = true
+}
+
+variable "jwt_secret" {
+  description = "JWT signing secret to store in Secrets Manager"
+  type        = string
+  sensitive   = true
+}

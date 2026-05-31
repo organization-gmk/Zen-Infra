@@ -8,7 +8,7 @@ locals {
 
   name_prefix = "${var.project_name}"
   azs = slice(data.aws_availability_zones.available.names, 0, 2)
-  
+  env = "${var.environment}"
   # Common tags
   common_tags = merge({
     Environment = var.environment

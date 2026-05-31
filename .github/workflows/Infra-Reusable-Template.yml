@@ -30,6 +30,14 @@ jobs:
     name: "Terraform Plan (${{ inputs.environment }})"
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }} 
+
+    env:
+      TF_LOG: ERROR
+      
+      TF_VAR_db_username: ${{ secrets.DB_USERNAME }}
+      TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+      TF_VAR_jwt_secret:  ${{ secrets.JWT_SECRET }}
+
     container:
       image: krishna0011/awscli-tf-1.5:latest
       credentials:
@@ -46,6 +54,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
+          audience: sts.amazonaws.com
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
@@ -57,7 +66,7 @@ jobs:
           terraform init -backend-config=${{ inputs.Terraform_Backend_Configuration_File }}
 
       - name: Terraform Validate
-        run: terraform validate -no-color
+        run: terraform validate
 
       # Speculative Plan for PRs or Standard Merges
       - name: Terraform Plan (Standard)
@@ -92,6 +101,12 @@ jobs:
     # Gated to prevent code executions during basic Pull Requests
     if: inputs.Action == 'apply' || inputs.Action == 'destroy'
     environment: ${{ inputs.environment }} # <-- GitHub pauses execution here for manual approval gate
+    env:
+      
+      TF_VAR_db_username: ${{ secrets.DB_USERNAME }}
+      TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+      TF_VAR_jwt_secret:  ${{ secrets.JWT_SECRET }}
+
     container:
       image: krishna0011/awscli-tf-1.5:latest
       credentials:
@@ -108,7 +123,8 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-
+          audience: sts.amazonaws.com
+          
       - name: Terraform Init
         run: |
           rm -rf .terraform
