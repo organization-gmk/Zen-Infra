@@ -105,5 +105,5 @@ variable "cluster_autoscaler_arn" {
 
 variable "namespaces" {
   type    = list(string)
-  default = ["zen-pharma", "zen_argocd"]
+  default = ["zen-pharma", "zen-argocd"]
 }
