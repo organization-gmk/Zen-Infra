@@ -25,3 +25,6 @@ node_groups = {
 
 db_name = "pharmadb"
 
+#Zpharma
+#Krish@990
+#0207b398f197ad932ee0a702e3b0752bbed46fdb312fa11a6b66bf25ce0722a1

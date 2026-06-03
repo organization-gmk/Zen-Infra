@@ -102,3 +102,8 @@ variable "aws_load_balancer_controller_arn" {
 variable "cluster_autoscaler_arn" {
   
 }
+
+variable "namespaces" {
+  type    = list(string)
+  default = ["zen-pharma", "Zen_ArgoCD"]
+}

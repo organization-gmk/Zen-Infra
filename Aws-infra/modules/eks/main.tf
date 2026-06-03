@@ -137,8 +137,10 @@ resource "kubernetes_service_account_v1" "aws_load_balancer_controller" {
 }
 
 resource "kubernetes_namespace_v1" "app_namespace" {
+  for_each = toset(var.namespaces)
+
   metadata {
-    name = "zen-pharma"
+    name = each.value
   }
   
   depends_on = [
